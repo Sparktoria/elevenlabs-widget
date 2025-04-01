@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>ElevenLabs Widget Host</title>
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Loading AI Interview Assistant...</p>
+    <script>
+      window.addEventListener("message", (event) => {
+        const data = event.data;
+
+        if (typeof data === "object" && data.agentId) {
+          const script = document.createElement("script");
+          script.src = "https://elevenlabs.io/convai-widget/index.js";
+          script.async = true;
+          script.type = "text/javascript";
+          document.body.appendChild(script);
+
+          const widget = document.createElement("elevenlabs-convai");
+          widget.setAttribute("agent-id", data.agentId);
+          widget.setAttribute("clientName", data.clientName);
+          widget.setAttribute("companyName", data.companyName);
+          document.body.appendChild(widget);
+        }
+      });
+
+      // Signal to parent page that iframe is ready
+      window.parent.postMessage("ready", "*");
+    </script>
+  </body>
+</html>
